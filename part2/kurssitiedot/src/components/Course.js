@@ -7,22 +7,21 @@ const Note = ({ note, exercises }) => {
 }
 
 const Total = ({ course }) => {
-    let total = course.parts.map(sum => sum.exercises)
+    const total = course.reduce((s, p) => (s + p.exercises), 0)
     return (
-        <p><b>total of {total.reduce((s,p) => s + p)} exercises</b></p>
+        <p><b>total of {total} exercises</b></p>
     )
 }
 
 const Course = ({ course }) => {
 
-    console.log(course);
     return (
         <div>
             <Header course={course}/>
             {course.parts.map(part => 
                 <Note key={part.id} note={part.name} exercises={part.exercises} />
             )}
-            <Total course={course}/>
+            <Total course={course.parts}/>
         </div>
     )
 }
