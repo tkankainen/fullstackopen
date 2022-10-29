@@ -1,6 +1,44 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const Filter = ({ filter, handleFilterChange }) => {
+  return (
+    <div>filter shown with <input 
+      value={filter}
+      onChange={handleFilterChange}
+      />
+    </div>
+  )
+}
+
+const PersonForm = ({ newName, newNumber, addPerson, handleNameChange, handleNumberChange }) => {
+  return (
+    <form onSubmit={addPerson}>
+      <div>name: <input 
+        value={newName}
+        onChange={handleNameChange}
+        />
+      </div>
+      <div>number: <input 
+        value={newNumber}
+        onChange={handleNumberChange}
+        />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
+}
+
+const Persons = ({ personsToShow }) => {
+  return (
+  personsToShow.map(person =>
+    <p key={person.name}>{person.name} {person.number}</p>
+    )
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
@@ -45,52 +83,25 @@ const App = () => {
     ? persons
     : persons.filter(person => person.name.includes(filter))
 
-  const Filter = () => {
-    return (
-      <div>filter shown with <input 
-        value={filter}
-        onChange={handleFilterChange}
-        />
-      </div>
-    )
-  }
-
-  const PersonForm = () => {
-    return (
-      <form onSubmit={addPerson}>
-        <div>name: <input 
-          value={newName}
-          onChange={handleNameChange}
-          />
-        </div>
-        <div>number: <input 
-          value={newNumber}
-          onChange={handleNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-    )
-  }
-
-  const Persons = () => {
-    return (
-    personsToShow.map(person =>
-      <p key={person.name}>{person.name} {person.number}</p>
-      )
-    )
-  }
-
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter />
+      <Filter 
+        filter={filter}
+        handleFilterChange={handleFilterChange}
+      />
       <h3>Add a new</h3>
-      <PersonForm />
+      <PersonForm 
+        newName={newName}
+        newNumber={newNumber}
+        addPerson={addPerson}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+      />
       <h3>Numbers</h3>
-      <Persons />
+      <Persons 
+        personsToShow={personsToShow}
+      />
     </div>
   )
 }
