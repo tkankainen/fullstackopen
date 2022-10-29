@@ -81,7 +81,7 @@ const App = () => {
   
   const personsToShow = showAll
     ? persons
-    : persons.filter(person => person.name.includes(filter))
+    : persons.filter(person => person.name.includes(filter)) //.toUpperCase
 
   return (
     <div>
