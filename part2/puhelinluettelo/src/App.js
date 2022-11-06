@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
 
 const Filter = ({ filter, handleFilterChange }) => {
@@ -63,15 +62,28 @@ const App = () => {
       number: newNumber
     }
 
-    persons.find(element => element.name === newName)
-    ? alert(`${newName} is already added to phonebook`)
-    :personService
-      .create(newObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-      })
-    setNewName('')
-    setNewNumber('')
+    const sameperson = persons.find(element => element.name.toUpperCase() === newName.toUpperCase())
+    const confirmupdate = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+    const person = persons.find(p => p.name.toUpperCase() === newName.toUpperCase())
+
+    if (sameperson) {
+      if (confirmupdate) {
+        const updateperson = { ...person, number: newNumber }
+        personService
+          .update(person.id, updateperson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== sameperson.id ? person : returnedPerson))
+          })
+      }
+    } else {
+        personService
+          .create(newObject)
+          .then(returnedPerson => {
+            setPersons(persons.concat(returnedPerson))
+          })
+        setNewName('')
+        setNewNumber('')
+    }
   }
 
   const deletePerson = (id) => {
