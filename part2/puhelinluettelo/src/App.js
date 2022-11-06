@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import personService from './services/persons'
 
 const Filter = ({ filter, handleFilterChange }) => {
   return (
@@ -31,10 +32,11 @@ const PersonForm = ({ newName, newNumber, addPerson, handleNameChange, handleNum
   )
 }
 
-const Persons = ({ personsToShow }) => {
+const Persons = ({ personsToShow, deletePerson }) => {
   return (
   personsToShow.map(person =>
-    <p key={person.name}>{person.name} {person.number}</p>
+    <p key={person.name}>{person.name} {person.number} 
+    <button onClick={() => deletePerson(person.id)}>Delete</button></p>
     )
   )
 }
@@ -47,11 +49,11 @@ const App = () => {
   const [showAll, setShowAll] = useState(false) //true
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
+    personService
+      .getAll()
+      .then(initialPersons => {
+      setPersons(initialPersons)
+    })
   }, [])
 
   const addPerson = (event) => {
@@ -60,11 +62,30 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+
     persons.find(element => element.name === newName)
     ? alert(`${newName} is already added to phonebook`)
-    : setPersons(persons.concat(newObject))
+    :personService
+      .create(newObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+      })
     setNewName('')
     setNewNumber('')
+  }
+
+  const deletePerson = (id) => {
+    const person = persons.find(p => p.id === id)
+    const confirm = window.confirm(`Delete ${person.name}?`)
+
+    if (confirm) {
+      personService
+        .deleteperson(id)
+        .then(returnedPerson => {
+          persons.map(person => person.id !== id ? person : returnedPerson)
+        })
+        setPersons(persons.filter(person => person.id !== id))
+    }
   }
 
   const handleNameChange = (event) => {
@@ -81,7 +102,7 @@ const App = () => {
   
   const personsToShow = showAll
     ? persons
-    : persons.filter(person => person.name.includes(filter)) //.toUpperCase
+    : persons.filter(person => person.name.toUpperCase().includes(filter.toUpperCase()))
 
   return (
     <div>
@@ -101,6 +122,7 @@ const App = () => {
       <h3>Numbers</h3>
       <Persons 
         personsToShow={personsToShow}
+        deletePerson={deletePerson}
       />
     </div>
   )
