@@ -12,6 +12,21 @@ const Search = ({ search, handleChange}) => {
 }
 
 const ShowCountry = ( {country} ) => {
+
+  const [icon, setIcon] = useState('')
+  const [temp, setTemp] = useState(0)
+  const [wind, setWind] = useState(0)
+  const apiKey = process.env.REACT_APP_API_KEY
+  useEffect(() => {
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?q=${country.capital}&appid=${apiKey}&units=metric`)
+      .then(response => {
+        setIcon(`http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`)
+        setTemp(response.data.main.temp)
+        setWind(response.data.wind.speed)
+      })
+  }, [])
+
   return (
     <div>
       <h3>{country.name.common}</h3> 
@@ -22,6 +37,11 @@ const ShowCountry = ( {country} ) => {
           {Object.values(country.languages).map(language => <li key={language}>{language}</li>)}
         </ul>
       <p><img src={country.flags.png} alt="flag" /></p>
+
+      <h3>Weather in {country.capital}</h3>
+      <p>temperature {temp} celcius</p>
+      <p><img src={icon} alt="weather icon"/></p>
+      <p>wind {wind} m/s</p>
     </div>
   )
 }
