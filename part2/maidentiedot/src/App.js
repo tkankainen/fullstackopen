@@ -11,11 +11,24 @@ const Search = ({ search, handleChange}) => {
   )
 }
 
-const Country = ({ data, search }) => {
+const ShowCountry = ( {country} ) => {
+  return (
+    <div>
+      <h3>{country.name.common}</h3> 
+      <p>capital {country.capital}</p>
+      <p>area {country.area}</p>
+      <h4>languages:</h4>
+        <ul>
+          {Object.values(country.languages).map(language => <li key={language}>{language}</li>)}
+        </ul>
+      <p><img src={country.flags.png} alt="flag" /></p>
+    </div>
+  )
+}
 
-  const countries = data.filter(country =>
-    country.name.common.toUpperCase().includes(search.toUpperCase())
-  );
+const Country = ({ countries, setSearch }) => {
+
+  console.log(countries);
 
   if (countries.length > 10) {
     return (
@@ -26,39 +39,21 @@ const Country = ({ data, search }) => {
   if (countries.length > 1) {
     return (
       <div>
-        {data
-        .filter(country => country.name.common.toUpperCase().includes(search.toUpperCase()))
-        .map(country => 
-          <p key={country.name.common}> {country.name.common} </p>
-        )}
-    </div>
+      {countries.map(country => 
+      <div><p key ={country.name.common}>{country.name.common}</p>
+      <button onClick={() => setSearch(country.name.common)}>show</button></div>
+      )}
+  </div>
     )
   }
 
   if (countries.length === 1) {
+    const country = countries[0]
     return (
-      <div>
-      <ul>
-      {countries
-        .filter(country =>
-          country.name.common.toUpperCase().includes(search.toUpperCase())
-        )
-        .map(country => 
-          <div key={country.name.common}> 
-          <h3>{country.name.common}</h3> 
-          <p>capital {country.capital}</p>
-          <p>area {country.area}</p>
-          <h4>languages:</h4>
-          <ul>
-            {Object.values(country.languages).map(language => <li key={language}>{language}</li>)}
-          </ul>
-          <p><img src={country.flags.png} alt="flag" /></p>
-          </div>
-        )}
-    </ul>
-    </div>
+      <ShowCountry country={country}/>
     )
   }
+
 }
 
 const App = () => {
@@ -77,6 +72,10 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  const countries = data.filter(country =>
+    country.name.common.toUpperCase().includes(search.toUpperCase())
+  );
+
   return (
     <div>
       <Search
@@ -84,8 +83,8 @@ const App = () => {
         handleChange={handleChange}
       />
       <Country
-        data={data}
-        search={search}
+        countries={countries}
+        setSearch={setSearch}
       />
     </div>
   );
