@@ -37,6 +37,7 @@ const Country = ({ data, search }) => {
 
   if (countries.length === 1) {
     return (
+      <div>
       <ul>
       {countries
         .filter(country =>
@@ -47,24 +48,18 @@ const Country = ({ data, search }) => {
           <h3>{country.name.common}</h3> 
           <p>capital {country.capital}</p>
           <p>area {country.area}</p>
+          <h4>languages:</h4>
+          <ul>
+            {Object.values(country.languages).map(language => <li key={language}>{language}</li>)}
+          </ul>
+          <p><img src={country.flags.png} alt="flag" /></p>
           </div>
         )}
     </ul>
+    </div>
     )
   }
 }
-
-/*
-<Country
-            key={country.name}
-            name={country.name}
-            capital={country.capital}
-            population={country.population}
-            languages={country.languages}
-            flagUrl={country.flag}
-          />
-        */
-
 
 const App = () => {
   const [data, setData] = useState([])
