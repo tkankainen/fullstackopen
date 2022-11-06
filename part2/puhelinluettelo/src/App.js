@@ -1,44 +1,10 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
-
-const Filter = ({ filter, handleFilterChange }) => {
-  return (
-    <div>filter shown with <input 
-      value={filter}
-      onChange={handleFilterChange}
-      />
-    </div>
-  )
-}
-
-const PersonForm = ({ newName, newNumber, addPerson, handleNameChange, handleNumberChange }) => {
-  return (
-    <form onSubmit={addPerson}>
-      <div>name: <input 
-        value={newName}
-        onChange={handleNameChange}
-        />
-      </div>
-      <div>number: <input 
-        value={newNumber}
-        onChange={handleNumberChange}
-        />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  )
-}
-
-const Persons = ({ personsToShow, deletePerson }) => {
-  return (
-  personsToShow.map(person =>
-    <p key={person.name}>{person.name} {person.number} 
-    <button onClick={() => deletePerson(person.id)}>Delete</button></p>
-    )
-  )
-}
+import './index.css'
+import Notification from './components/Notification'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -46,6 +12,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [showAll, setShowAll] = useState(false) //true
+  const [notification, setNotification] = useState('')
+  const [errormessage, setErrormessage] = useState('')
 
   useEffect(() => {
     personService
@@ -61,30 +29,43 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+    const person = persons.find(person => person.name === newName)
 
-    const sameperson = persons.find(element => element.name.toUpperCase() === newName.toUpperCase())
-    const confirmupdate = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
-    const person = persons.find(p => p.name.toUpperCase() === newName.toUpperCase())
-
-    if (sameperson) {
-      if (confirmupdate) {
-        const updateperson = { ...person, number: newNumber }
+    if (person) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         personService
-          .update(person.id, updateperson)
+          .update(person.id, newObject)
           .then(returnedPerson => {
-            setPersons(persons.map(person => person.id !== sameperson.id ? person : returnedPerson))
+            setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+          setNotification(`Updated ${person.name}`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
           })
+          .catch(error => {
+            setErrormessage(`Information of ${person.name} has already been removed from server`)
+            setTimeout(() => {
+              setErrormessage(null)
+            }, 5000)
+          }) 
+          setPersons(persons.filter(p => p.id !== person.id)) 
       }
-    } else {
+    
+      } else {
         personService
-          .create(newObject)
-          .then(returnedPerson => {
-            setPersons(persons.concat(returnedPerson))
-          })
-        setNewName('')
-        setNewNumber('')
+            .create(newObject)
+            .then(returnedPerson => {
+              setPersons(persons.concat(returnedPerson))
+            })
+          setNewName('')
+          setNewNumber('')
+          setNotification(`Added ${newName}`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+      }   
     }
-  }
+  
 
   const deletePerson = (id) => {
     const person = persons.find(p => p.id === id)
@@ -95,6 +76,16 @@ const App = () => {
         .deleteperson(id)
         .then(returnedPerson => {
           persons.map(person => person.id !== id ? person : returnedPerson)
+          setNotification(`Deleted ${person.name}`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+        })
+        .catch(error => {
+          setErrormessage(`Information of ${person.name} has already been removed from server`)
+          setTimeout(() => {
+            setErrormessage(null)
+          }, 5000)
         })
         setPersons(persons.filter(person => person.id !== id))
     }
@@ -114,11 +105,13 @@ const App = () => {
   
   const personsToShow = showAll
     ? persons
-    : persons.filter(person => person.name.toUpperCase().includes(filter.toUpperCase()))
+    : persons.filter(person => person.name.includes(filter))
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} error={false}/>
+      <Notification message={errormessage} error={true}/>
       <Filter 
         filter={filter}
         handleFilterChange={handleFilterChange}
@@ -138,6 +131,7 @@ const App = () => {
       />
     </div>
   )
+
 }
 
 export default App
