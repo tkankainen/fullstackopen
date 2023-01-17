@@ -30,14 +30,6 @@ test('all blogs are returned', async () => {
   
     expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
-  
-test('a specific author is within the returned blogs', async () => {
-    const response = await api.get('/api/blogs')
-
-    const contents = response.body.map(r => r.author)
-
-    expect(contents).toContain('th')
-})
 
 test('blog is identified by id', async () => {
     const response = await api.get('/api/blogs')

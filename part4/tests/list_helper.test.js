@@ -41,6 +41,20 @@ const listHelper = require('../utils/list_helper')
     expect(result).toBe(1)
   })
 
+  test('most blogs', () => {
+    expect(listHelper.mostBlogs(blogs)).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3
+    })
+  })
+
+  test('most likes', () => {
+    expect(listHelper.mostLikes(blogs)).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 17
+    })
+  })
+
   const emptyBlogList = []
 
   const listWithOneBlog = [
