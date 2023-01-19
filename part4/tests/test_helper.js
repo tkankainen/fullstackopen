@@ -3,19 +3,17 @@ const User = require('../models/user')
 
 const initialBlogs = [
     {
-        title: "blogi",
-        author: "th",
-        url: "url",
-        likes: 2,
-        id: "63a46024705f85cf8d26261f"
+      title: "React patterns",
+      author: "Michael Chan",
+      url: "https://reactpatterns.com/",
+      likes: 7
     },
     {
-        title: "blogi2",
-        author: "kirjoittaja",
-        url: "url2",
-        likes: 5,
-        id: "63a467f342a8ab625a659202"
-    }
+      title: "Go To Statement Considered Harmful",
+      author: "Edsger W. Dijkstra",
+      url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+      likes: 5
+    },
 ]
 
 const nonExistingId = async () => {
