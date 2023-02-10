@@ -8,9 +8,6 @@ import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -89,23 +86,13 @@ const App = () => {
     </form>
   )
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
-    }
-
+  const createBlog = (event) => {
     blogFormRef.current.toggleVisibility()
     blogService
-      .create(blogObject)
+      .create(event)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
         notify(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
-        setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
       })
   }
 
@@ -135,13 +122,7 @@ const App = () => {
           {bloglist()}
           <Togglable buttonLabel="create new blog" ref={blogFormRef}>
             <BlogForm
-              newTitle={newTitle}
-              newAuthor={newAuthor}
-              newUrl={newUrl}
-              setNewTitle={({ target }) => setNewTitle(target.value)}
-              setNewAuthor={({ target }) => setNewAuthor(target.value)}
-              setNewUrl={({ target }) => setNewUrl(target.value)}
-              addBlog={addBlog}
+              createBlog={createBlog}
             />
           </Togglable>
         </div>
