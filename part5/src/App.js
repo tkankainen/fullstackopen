@@ -8,11 +8,10 @@ import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
-  const [blogformVisible, setBlogformVisible] = useState(false)
   const blogFormRef = useRef()
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const App = () => {
       })
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
-      ) 
+      )
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -65,7 +64,7 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -74,7 +73,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -101,28 +100,28 @@ const App = () => {
       const updatedBlog = await blogService.update(id, blogToUpdate)
       const newBlogs = blogs.map((blog) =>
         blog.id === id ? updatedBlog : blog
-      );
+      )
       setBlogs(newBlogs)
     } catch (exception) {
       console.log('Error updating blog:', exception.response.data.error)
     }
-  };
+  }
 
   const deleteBlog = async (id) => {
     try {
-      const response = await blogService.remove(id)
+      await blogService.remove(id)
       setBlogs(blogs.filter((blog) => blog.id !== id))
     } catch (exception) {
       console.log('Error deleting blog:', exception.response.data.error)
     }
-  };
+  }
 
   const bloglist = () => (
     <div>
-      <p>
+      <div>
         {blogs
           .sort((a, b) => b.likes - a.likes)
-          .map((blog) => 
+          .map((blog) =>
             <Blog
               key={blog.id}
               blog={blog}
@@ -130,18 +129,18 @@ const App = () => {
               updateBlog={updateBlog}
               deleteBlog={deleteBlog}
             />
-        )}
-      </p>
+          )}
+      </div>
     </div>
   )
-  
+
   return (
     <div>
       <h2>blogs</h2>
 
       <Notification message={notification} />
 
-      {user === null ? 
+      {user === null ?
         loginForm() :
         <div>
           <p>{user.name} logged in <button onClick={() => handleLogout()}>logout</button></p>
