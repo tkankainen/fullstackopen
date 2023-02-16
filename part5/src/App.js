@@ -17,8 +17,8 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+      setBlogs(blogs)
+    )
   }, [])
 
   useEffect(() => {
@@ -39,7 +39,6 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
     try {
       const user = await loginService.login({
         username, password,
@@ -86,24 +85,51 @@ const App = () => {
     </form>
   )
 
-  const createBlog = (event) => {
-    blogFormRef.current.toggleVisibility()
-    blogService
-      .create(event)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        notify(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
-      })
+  const createBlog = async (event) => {
+    try {
+      blogFormRef.current.toggleVisibility()
+      const blog = await blogService.create(event)
+      setBlogs(blogs.concat(blog))
+      notify(`a new blog ${blog.title} by ${blog.author} added`)
+    } catch (exception) {
+      console.log('Error creating blog:', exception.response.data.error)
+    }
   }
+
+  const updateBlog = async (id, blogToUpdate) => {
+    try {
+      const updatedBlog = await blogService.update(id, blogToUpdate)
+      const newBlogs = blogs.map((blog) =>
+        blog.id === id ? updatedBlog : blog
+      );
+      setBlogs(newBlogs)
+    } catch (exception) {
+      console.log('Error updating blog:', exception.response.data.error)
+    }
+  };
+
+  const deleteBlog = async (id) => {
+    try {
+      const response = await blogService.remove(id)
+      setBlogs(blogs.filter((blog) => blog.id !== id))
+    } catch (exception) {
+      console.log('Error deleting blog:', exception.response.data.error)
+    }
+  };
 
   const bloglist = () => (
     <div>
       <p>
-        {blogs.map((blog) => 
-          <Blog
-            key={blog.id}
-            blog={blog} 
-          />
+        {blogs
+          .sort((a, b) => b.likes - a.likes)
+          .map((blog) => 
+            <Blog
+              key={blog.id}
+              blog={blog}
+              user={user}
+              updateBlog={updateBlog}
+              deleteBlog={deleteBlog}
+            />
         )}
       </p>
     </div>
