@@ -32,14 +32,14 @@ const Blog = ( { blog, updateBlog, deleteBlog } ) => {
   return (
     <div style={blogStyle}>
       {/*blogin kaikki tiedot näkyviin joko nimiriviä tai nappia klikkaamalla*/}
-      <div onClick={() => setShowAll(!showAll)}>
+      <div onClick={() => setShowAll(!showAll)} className="firstline">
         {blog.title} {blog.author}
         <button onClick={() => setShowAll(!showAll)}>
           {showAll ? 'hide' : 'view' }
         </button>
       </div>
       {showAll === true ?
-        <div>
+        <div className='showinfo'>
           <div>{blog.url}</div>
           <div>{blog.likes} likes <button onClick={() => likeBlog()}>like</button></div>
           <div>{blog.user.name}</div>
@@ -53,8 +53,8 @@ const Blog = ( { blog, updateBlog, deleteBlog } ) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  updateBlog: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired
+  //updateBlog: PropTypes.func.isRequired,
+  //deleteBlog: PropTypes.func.isRequired
 }
 
 export default Blog
