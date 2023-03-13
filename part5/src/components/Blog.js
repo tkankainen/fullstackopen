@@ -30,7 +30,7 @@ const Blog = ( { blog, updateBlog, deleteBlog } ) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       {/*blogin kaikki tiedot näkyviin joko nimiriviä tai nappia klikkaamalla*/}
       <div onClick={() => setShowAll(!showAll)} className="firstline">
         {blog.title} {blog.author}

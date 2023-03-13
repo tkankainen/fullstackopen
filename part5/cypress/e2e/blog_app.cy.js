@@ -1,3 +1,5 @@
+import { func } from "prop-types"
+
 describe('Blog', function() {
   beforeEach(function() {
     cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
@@ -6,7 +8,13 @@ describe('Blog', function() {
       username: 'user12',
       password: 'salainensana'
     }
+    const user2 = {
+      name: 'testi2',
+      username: 'user',
+      password: 'salasana'
+    }
     cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user)
+    cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user2)
     cy.visit('')
   })
 
@@ -49,18 +57,16 @@ describe('Blog', function() {
       cy.contains('title author')
     })
 
-    describe('A couple of blogs', function() {
+    describe('Blogs', function() {
       beforeEach(function() {
-        cy.createBlog({ title: "Ensimmäinen", author: "Kirjoittaja", url: "http://www.test.com", likes: 7 })
+        cy.createBlog({ title: "Ensimmäinen", author: "Kirjoittaja", url: "http://www.test.com", likes: 3 })
         cy.createBlog({ title: "Toinen", author: "Kirjoittaja2", url: "http://www.test.com", likes: 0 })
         cy.createBlog({ title: "Kolmas", author: "Kirjoittaja3", url: "http://www.test.com", likes: 2 })
       })
 
       it('A blog can be liked', function() {
         cy.contains('Toinen').click()
-        cy.contains('like').click()
-        cy.contains('like').click()
-        cy.contains('like').click()
+        cy.contains('like').click().wait(500).click().wait(500).click()
         cy.contains('3 likes')
       })
 
@@ -68,6 +74,27 @@ describe('Blog', function() {
         cy.contains('Ensimmäinen').click()
         cy.contains('remove').click()
         cy.contains('Ensimmäinen').should('not.exist')
+      })
+
+      it('Only user who created the blog can delete it', function() {
+        window.localStorage.removeItem('loggedUser')
+        cy.login({ username: 'user', password: 'salasana' })
+        cy.contains('Toinen').click()
+        cy.contains('remove').click()
+        cy.contains('Toinen')
+      })
+
+      it('Blogs are shown in order of likes', function() {
+        cy.contains('Toinen').click()
+        cy.contains('like').click().wait(500).click().wait(500).click().wait(500).click().wait(500).click()
+        cy.contains('Toinen').click()
+
+        cy.contains('Kolmas').click()
+        cy.contains('like').click().wait(500).click()
+
+        cy.get(".blog").eq(0).should("contain", "Toinen");
+        cy.get(".blog").eq(1).should("contain", "Kolmas");
+        cy.get(".blog").eq(2).should("contain", "Ensimmäinen");
       })
     })
   })
