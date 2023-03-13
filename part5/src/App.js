@@ -58,6 +58,7 @@ const App = () => {
     //window.localStorage.clear()
     window.localStorage.removeItem('loggedUser')
     console.log('logged out')
+    setUser(null)
   }
 
   const loginForm = () => (
@@ -67,7 +68,7 @@ const App = () => {
         <input
           type="text"
           value={username}
-          name="Username"
+          id="username"
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
@@ -76,11 +77,11 @@ const App = () => {
         <input
           type="password"
           value={password}
-          name="Password"
+          id="password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button id="login-button" type="submit">login</button>
     </form>
   )
 
@@ -112,7 +113,7 @@ const App = () => {
       await blogService.remove(id)
       setBlogs(blogs.filter((blog) => blog.id !== id))
     } catch (exception) {
-      console.log('Error deleting blog:', exception.response.data.error)
+      console.log('Error deleting blog:', exception)
     }
   }
 
