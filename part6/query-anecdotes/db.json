@@ -3,22 +3,22 @@
     {
       "content": "If it hurts, do it more often",
       "id": "47145",
-      "votes": 3
+      "votes": 6
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
       "id": "21149",
-      "votes": 0
+      "votes": 6
     },
     {
       "content": "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
       "id": "69581",
-      "votes": 4
+      "votes": 8
     },
     {
       "content": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
       "id": "36975",
-      "votes": 1
+      "votes": 3
     },
     {
       "content": "Premature optimization is the root of all evil.",
@@ -28,7 +28,7 @@
     {
       "content": "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
       "id": "98312",
-      "votes": 1
+      "votes": 3
     },
     {
       "content": "Anekdootti",
@@ -38,6 +38,66 @@
     {
       "content": "testi",
       "id": "69077",
+      "votes": 1
+    },
+    {
+      "content": "Uusi anekdootti",
+      "id": "7039",
+      "votes": 0
+    },
+    {
+      "content": "testi",
+      "id": "75132",
+      "votes": 1
+    },
+    {
+      "content": "testianekdootti",
+      "id": "65435",
+      "votes": 1
+    },
+    {
+      "content": "testi",
+      "id": "49282",
+      "votes": 1
+    },
+    {
+      "content": "testi",
+      "id": "85081",
+      "votes": 0
+    },
+    {
+      "content": "Uusi anekdootti",
+      "id": "44190",
+      "votes": 0
+    },
+    {
+      "content": "Anekdootti",
+      "id": "57857",
+      "votes": 0
+    },
+    {
+      "content": "Anekdootti",
+      "id": "30587",
+      "votes": 0
+    },
+    {
+      "content": "testi1",
+      "id": "2540",
+      "votes": 0
+    },
+    {
+      "content": "Anekdootti",
+      "id": "68661",
+      "votes": 0
+    },
+    {
+      "content": "Anekdootti",
+      "id": "71553",
+      "votes": 0
+    },
+    {
+      "content": "Uusi anekdootti",
+      "id": "76744",
       "votes": 1
     }
   ]
