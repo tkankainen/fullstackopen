@@ -25,19 +25,19 @@ const notificationReducer = (state, action) => {
 };
 
 export const NotificationContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(notificationReducer, initialState);
+  const [state, dispatch] = useReducer(notificationReducer, initialState)
 
   const setNotification = (message) => {
     const timeoutId = setTimeout(() => {
-      dispatch({ type: 'CLEAR_NOTIFICATION' });
-    }, 5000);
+      dispatch({ type: 'CLEAR_NOTIFICATION' })
+    }, 5000)
 
-    dispatch({ type: 'SET_NOTIFICATION', payload: message, timeoutId });
+    dispatch({ type: 'SET_NOTIFICATION', payload: message, timeoutId })
   };
 
   const clearNotification = () => {
-    clearTimeout(state.timeoutId);
-    dispatch({ type: 'CLEAR_NOTIFICATION' });
+    clearTimeout(state.timeoutId)
+    dispatch({ type: 'CLEAR_NOTIFICATION' })
   };
 
   const contextValue = {
@@ -55,9 +55,9 @@ export const NotificationContextProvider = ({ children }) => {
 
 export const useNotification = () => {
   const { message, setNotification, clearNotification } =
-    React.useContext(NotificationContext);
+    React.useContext(NotificationContext)
 
-  return { message, setNotification, clearNotification };
+  return { message, setNotification, clearNotification }
 };
 
 export default NotificationContext

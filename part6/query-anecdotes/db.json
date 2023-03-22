@@ -33,12 +33,12 @@
     {
       "content": "Anekdootti",
       "id": "13285",
-      "votes": 3
+      "votes": 4
     },
     {
       "content": "testi",
       "id": "69077",
-      "votes": 1
+      "votes": 2
     },
     {
       "content": "Uusi anekdootti",
@@ -93,12 +93,17 @@
     {
       "content": "Anekdootti",
       "id": "71553",
-      "votes": 0
+      "votes": 1
     },
     {
       "content": "Uusi anekdootti",
       "id": "76744",
       "votes": 1
+    },
+    {
+      "content": "Anekdootti",
+      "id": "62713",
+      "votes": 0
     }
   ]
 }

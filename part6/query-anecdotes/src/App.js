@@ -6,14 +6,19 @@ import { getAnecdotes, createAnecdote, updateAnecdote } from './requests'
 
 const App = () => {
   const queryClient = useQueryClient()
-  const { setNotification, clearNotification } = useNotification();
+  const { setNotification, clearNotification } = useNotification()
 
-  const newAnecdoteMutation = useMutation(createAnecdote, {
+  const addAnecdoteMutation = useMutation(createAnecdote, {
     onSuccess: () => {
       const message = 'Anecdote added successfully!'
       setNotification({ message })
       setTimeout(() => clearNotification(), 5000)
       queryClient.invalidateQueries('anecdotes')
+    },
+    onError: (error) => {
+      const message = 'too short anecdote, must have length 5 or more'
+      setNotification({ message })
+      setTimeout(() => clearNotification(), 5000)
     }
   })
 
@@ -23,7 +28,7 @@ const App = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newAnecdoteMutation.mutate({ content, id: getId(), votes: 0 })
+    addAnecdoteMutation.mutate({ content, id: getId(), votes: 0 })
   }
 
   const updateAnecdoteMutation = useMutation(updateAnecdote, {
