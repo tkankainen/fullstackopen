@@ -52,6 +52,8 @@ const Footer = () => (
   </div>
 )
 
+const excludeReset = ({ reset, ...props }) => props;
+
 const CreateNew = (props) => {
 
   const content = useField('text')
@@ -68,24 +70,31 @@ const CreateNew = (props) => {
     })
   }
 
+  const handleClear = () => {
+    content.reset();
+    author.reset();
+    info.reset();
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content}
+          <input {...excludeReset(content)}
           />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...excludeReset(author)} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...excludeReset(info)} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
+        <button type='button' onClick={handleClear}>reset</button>
       </form>
     </div>
   )
