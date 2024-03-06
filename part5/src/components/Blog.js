@@ -1,16 +1,16 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from "react";
+import PropTypes from "prop-types";
 
-const Blog = ( { blog, updateBlog, deleteBlog } ) => {
+const Blog = ({ blog, updateBlog, deleteBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: 'solid',
+    border: "solid",
     borderWidth: 1,
-    marginBottom: 5
-  }
+    marginBottom: 5,
+  };
 
-  const [showAll, setShowAll] = useState(false)
+  const [showAll, setShowAll] = useState(false);
 
   const likeBlog = () => {
     const blogToUpdate = {
@@ -18,43 +18,48 @@ const Blog = ( { blog, updateBlog, deleteBlog } ) => {
       likes: blog.likes + 1,
       author: blog.author,
       title: blog.title,
-      url: blog.url
-    }
-    updateBlog(blog.id, blogToUpdate)
-  }
+      url: blog.url,
+    };
+    updateBlog(blog.id, blogToUpdate);
+  };
 
   const handleDelete = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      deleteBlog(blog.id)
+      deleteBlog(blog.id);
     }
-  }
+  };
 
   return (
-    <div style={blogStyle} className='blog'>
+    <div style={blogStyle} className="blog">
       {/*blogin kaikki tiedot näkyviin joko nimiriviä tai nappia klikkaamalla*/}
       <div onClick={() => setShowAll(!showAll)} className="firstline">
         {blog.title} {blog.author}
         <button onClick={() => setShowAll(!showAll)}>
-          {showAll ? 'hide' : 'view' }
+          {showAll ? "hide" : "view"}
         </button>
       </div>
-      {showAll === true ?
-        <div className='showinfo'>
+      {showAll === true ? (
+        <div className="showinfo">
           <div>{blog.url}</div>
-          <div>{blog.likes} likes <button onClick={() => likeBlog()}>like</button></div>
+          <div>
+            {blog.likes} likes <button onClick={() => likeBlog()}>like</button>
+          </div>
           <div>{blog.user.name}</div>
-          <div><button onClick={() => handleDelete()}>remove</button></div>
-        </div> :
+          <div>
+            <button onClick={() => handleDelete()}>remove</button>
+          </div>
+        </div>
+      ) : (
         <div></div>
-      }
+      )}
     </div>
-  )
-}
+  );
+};
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   //updateBlog: PropTypes.func.isRequired,
   //deleteBlog: PropTypes.func.isRequired
-}
+};
 
-export default Blog
+export default Blog;
