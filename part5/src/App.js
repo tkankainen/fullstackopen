@@ -5,6 +5,7 @@ import Togglable from "./components/Togglable";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Notification from "./components/Notification";
+import { Table, Form, Button } from 'react-bootstrap'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -59,29 +60,29 @@ const App = () => {
   };
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
+    <Form onSubmit={handleLogin}>
+      <Form.Group>
+        <Form.Label>username</Form.Label>
+        <Form.Control
           type="text"
           value={username}
           id="username"
           onChange={({ target }) => setUsername(target.value)}
         />
-      </div>
-      <div>
-        password
-        <input
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>password</Form.Label>
+        <Form.Control
           type="password"
           value={password}
           id="password"
           onChange={({ target }) => setPassword(target.value)}
         />
-      </div>
-      <button id="login-button" type="submit">
+      </Form.Group><br />
+      <Button variant="primary" type="submit">
         login
-      </button>
-    </form>
+      </Button>
+    </Form>
   );
 
   const createBlog = async (event) => {
@@ -118,23 +119,28 @@ const App = () => {
 
   const bloglist = () => (
     <div>
-      <div>
-        {blogs
-          .sort((a, b) => b.likes - a.likes)
-          .map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              updateBlog={updateBlog}
-              deleteBlog={deleteBlog}
-            />
-          ))}
-      </div>
+      <Table striped>
+        <tbody>
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <tr key={blog.id}>
+                <td>
+                  <Blog
+                    blog={blog}
+                    updateBlog={updateBlog}
+                    deleteBlog={deleteBlog}
+                  />
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
     </div>
   );
 
   return (
-    <div>
+    <div className="container">
       <h2>blogs</h2>
 
       <Notification message={notification} />
@@ -145,7 +151,7 @@ const App = () => {
         <div>
           <p>
             {user.name} logged in{" "}
-            <button onClick={() => handleLogout()}>logout</button>
+            <Button onClick={() => handleLogout()}>logout</Button>
           </p>
           {bloglist()}
           <Togglable buttonLabel="create new blog" ref={blogFormRef}>
